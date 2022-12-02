@@ -8,9 +8,13 @@ export const num = (input: unknown, errorMessage?: string) => {
   throw new ValidationError(errorMessage || `Invalid number input: "${input}"`)
 }
 
-export const str = (input: unknown, errorMessage?: string) => {
+export const str = (input: unknown, errorMessag?: string | number) => {
   if (typeof input === 'string') return input
-  throw new ValidationError(errorMessage || `Not a string: "${input}"`)
+  throw new ValidationError(
+    typeof errorMessag === 'undefined' || typeof errorMessag === 'number'
+      ? `Invalid string input: "${input}"`
+      : errorMessag
+  )
 }
 
 export const bool = (input: unknown | boolean, errorMessage?: string) => {
