@@ -13,4 +13,5 @@ export type Logger = Record<
 export type LoggerOptions = {
   level: LogLevelsUnion
   pretty: boolean
+  silent?: boolean
 }

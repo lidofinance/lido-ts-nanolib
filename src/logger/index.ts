@@ -4,7 +4,7 @@ import type { LoggerOptions, Logger } from './types'
 export const LOG_LEVELS = ['error', 'warn', 'log', 'info', 'debug']
 
 export const makeLogger = (options: LoggerOptions) => {
-  const { level, pretty }: LoggerOptions = options
+  const { level, pretty, silent }: LoggerOptions = options
   return LOG_LEVELS.reduce((logger, logLevel) => {
     logger[logLevel] = (message: string, details?: any) => {
       const logLevelOrder = LOG_LEVELS.indexOf(logLevel)
@@ -32,7 +32,7 @@ export const makeLogger = (options: LoggerOptions) => {
 
       const print = pretty ? printer.simple : printer.json
 
-      print(output, logLevel)
+      if (!silent) print(output, logLevel)
     }
     return logger
   }, {}) as Logger
