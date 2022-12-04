@@ -1,9 +1,7 @@
-import { make } from './makers.js'
-
-export const optional = (cb: ReturnType<typeof make>) => {
+export const optional = <T>(cb: () => T) => {
   try {
     return cb()
-  } catch (error) {
+  } catch (_) {
     return
   }
 }
@@ -32,11 +30,16 @@ export const pipe = <T>(arg: T, ...fns: Chain<T>) =>
 //   (arg: L | R): L | R => {
 //     const errors = []
 //   }
-const min_length = (len: number) => {
-  return <T>(arg: T extends string ? T : T[]) => {
+interface WithLength {
+  length: number
+}
+export const min_length = (len: number) => {
+  function check_length<T extends WithLength>(arg: T): T
+  function check_length<T>(arg: T extends string ? T : T[]) {
     if (arg.length > len) throw new Error('ssss')
     return arg
   }
+  return check_length
 }
 
 const concat_arr = <T>(val: T) => {
@@ -47,15 +50,3 @@ const concat_arr = <T>(val: T) => {
   }
 }
 
-// const concat_arr = (len: number) => {
-//   return (arg: (number | string)[]) => ([...arg, 4])
-// }
-
-const chain1 = chain(min_length(2))([1, 2, 3])
-const chain2 = chain(min_length(2))('sssss')
-const chain3 = chain(concat_arr(2))([1, 2, 3])
-
-const pipe1 = pipe({kek: 1}, (numbers) => numbers)
-// const pipe2 = pipe(min_length(2))('sssss')
-// const pipe3 = pipe(concat_arr(2))([1, 2, 3])
-// const aaa = chain(<T extends number[] ? T : never>(arr: T) => [...arr, 4])([1, 2, 3])
