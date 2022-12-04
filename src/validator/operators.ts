@@ -42,11 +42,10 @@ export const min_length = (len: number) => {
   return check_length
 }
 
-const concat_arr = <T>(val: T) => {
+export const concat_arr = <T>(val: T) => {
   return (arg: T[]) => {
     //   const arr = arg as T extends T[] ? T[] : never
     //   arg.push(val)
     return [...arg, val]
   }
 }
-

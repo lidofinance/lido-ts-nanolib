@@ -15,9 +15,7 @@ export const makeJobRunner = <Initial extends Record<Keys, unknown>>(
   },
   initial: Initial
 ) => {
-  return async (
-    cb: (handlerValue: Initial[Keys]) => Promise<void>
-  ) => {
+  return async (cb: (handlerValue: Initial[Keys]) => Promise<void>) => {
     const handler = async (handlerValue: Initial[Keys]) => {
       if (jobLockMap[name]) return
       jobLockMap[name] = true
@@ -43,4 +41,3 @@ export const makeJobRunner = <Initial extends Record<Keys, unknown>>(
     setInterval(handler, di.config.JOB_INTERVAL, initial.pooling)
   }
 }
-

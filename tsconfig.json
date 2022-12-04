@@ -13,6 +13,6 @@
     "outDir": "./dist",
     "baseUrl": "./src",
   },
-  "exclude": ["node_modules", "**/*.spec.ts"],
+  "exclude": ["node_modules"],
   "ts-node": { "esm": true }
 }
