@@ -9,10 +9,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
-    "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./src",
+    "declaration": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": { "esm": true }
 }
