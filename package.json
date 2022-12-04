@@ -1,9 +1,12 @@
 {
-  "name": "tooling-nanolib",
-  "version": "1.0.0",
+  "name": "tooling-nanolib-test",
+  "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "author": "Eddort <webisforce@gmail.com>",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
