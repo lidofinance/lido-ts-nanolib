@@ -31,7 +31,7 @@ export const or = <Left, Right>(left: () => Left, right: () => Right) => {
   } catch (error) {
     rightError = error
   }
-  if (leftError || rightError || !result)
+  if ((leftError && rightError) || !result)
     throw new ValidationError(
       leftError?.message || rightError?.message || 'OR runtime error'
     )
