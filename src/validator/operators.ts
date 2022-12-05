@@ -8,11 +8,7 @@ export const optional = <T>(cb: () => T) => {
   }
 }
 
-export const wrap = <T>(
-  input: unknown,
-  cb: () => T,
-  errorMessage?: string
-) => {
+export const wrap = <T>(input: unknown, cb: () => T, errorMessage?: string) => {
   try {
     return cb()
   } catch (error) {
