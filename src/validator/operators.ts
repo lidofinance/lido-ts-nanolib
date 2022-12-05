@@ -16,6 +16,28 @@ export const wrap = <T>(cb: () => T, errorMessage?: string) => {
   }
 }
 
+export const or = <Left, Right>(left: () => Left, right: () => Right) => {
+  let result: Left | Right | undefined
+  let leftError: ValidationError | undefined
+  let rightError: ValidationError | undefined
+  try {
+    result = left()
+  } catch (error) {
+    leftError = error
+  }
+
+  try {
+    result = right()
+  } catch (error) {
+    rightError = error
+  }
+  if (leftError || rightError || !result)
+    throw new ValidationError(
+      leftError?.message || rightError?.message || 'OR runtime error'
+    )
+  return result
+}
+
 type Fn<T> = (arg: T) => T
 type Chain<T> = Fn<T>[]
 
@@ -28,7 +50,8 @@ interface WithLength {
 export const min_length = (len: number, errorMessage?: string) => {
   function check_length<T extends WithLength>(arg: T): T
   function check_length<T>(arg: T extends string ? T : T[]) {
-    if (arg.length > len) throw new ValidationError(errorMessage || 'Invalid length')
+    if (arg.length > len)
+      throw new ValidationError(errorMessage || 'Invalid length')
     return arg
   }
   return check_length
