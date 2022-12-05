@@ -54,8 +54,9 @@ const fetchCall = ({ url, baseUrl, ...rest }: InternalConfig) =>
  * @param middleware Middleware[]
  * @returns fetchLike
  */
-export const makeRequest = (middleware: Middleware[]) => {
+export const makeRequest = (initMiddlewares: Middleware[]) => {
   return (url: RequestInfo, requestConfig?: RequestConfig) => {
+    const middleware = initMiddlewares.concat(requestConfig?.middlewares || [])
     // copy object bcs we can mutate it
     const internalConfig = { ...requestConfig } as InternalConfig
     internalConfig.attempt = 0
