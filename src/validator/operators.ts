@@ -8,11 +8,15 @@ export const optional = <T>(cb: () => T) => {
   }
 }
 
-export const wrap = <T>(cb: () => T, errorMessage?: string) => {
+export const wrap = <T>(
+  input: T,
+  cb: (input: T) => T,
+  errorMessage?: string
+) => {
   try {
-    return cb()
+    return cb(input)
   } catch (error) {
-    throw new ValidationError(errorMessage || error.message)
+    throw new ValidationError(errorMessage || error.message, input)
   }
 }
 
