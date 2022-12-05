@@ -1,4 +1,4 @@
-import { ValidationError } from './errors'
+import { ValidationError } from './errors.js'
 
 export const optional = <T>(cb: () => T) => {
   try {
