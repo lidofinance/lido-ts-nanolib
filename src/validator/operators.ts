@@ -9,12 +9,12 @@ export const optional = <T>(cb: () => T) => {
 }
 
 export const wrap = <T>(
-  input: T,
-  cb: (input: T) => T,
+  input: unknown,
+  cb: () => T,
   errorMessage?: string
 ) => {
   try {
-    return cb(input)
+    return cb()
   } catch (error) {
     throw new ValidationError(errorMessage || error.message, input)
   }
