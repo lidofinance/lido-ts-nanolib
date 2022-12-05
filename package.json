@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "author": "Eddort <webisforce@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "files": [
     "dist"
   ],

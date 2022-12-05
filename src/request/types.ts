@@ -5,6 +5,7 @@ import type {
 } from 'node-fetch'
 export interface RequestConfig extends RequestInit {
   baseUrl?: FetchRequestInfo
+  middlewares?: Middleware[]
 }
 
 export interface InternalConfig extends RequestConfig {
