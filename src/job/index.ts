@@ -6,6 +6,8 @@ const jobLockMap: Record<string, boolean> = {}
 
 type Keys = 'start' | 'pooling'
 
+export type JobRunnerModule = ReturnType<typeof makeJobRunner>
+
 export const makeJobRunner = <Initial extends Record<Keys, unknown>>(
   name: string,
   di: {
