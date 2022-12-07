@@ -1,45 +1,53 @@
 import type { Histogram } from 'prom-client'
 
-import { makeLogger } from '../logger'
+import { makeLogger } from '../logger/index.js'
 
 const jobLockMap: Record<string, boolean> = {}
 
-type Keys = 'start' | 'pooling'
+export type JobRunnerService = ReturnType<typeof makeJobRunner>
 
-export type JobRunnerModule = ReturnType<typeof makeJobRunner>
-
-export const makeJobRunner = <Initial extends Record<Keys, unknown>>(
+export const makeJobRunner = <Initial>(
   name: string,
-  di: {
+  {
+    config,
+    logger,
+    metric,
+    handler,
+  }: {
     config: { JOB_INTERVAL: number }
     logger: ReturnType<typeof makeLogger>
     metric: Histogram
-  },
-  initial: Initial
+    handler: (handlerValue: Initial) => Promise<void>
+  }
 ) => {
-  return async (cb: (handlerValue: Initial[Keys]) => Promise<void>) => {
-    const handler = async (handlerValue: Initial[Keys]) => {
-      if (jobLockMap[name]) return
-      jobLockMap[name] = true
+  const once = async (handlerValue: Initial) => {
+    if (jobLockMap[name]) return
+    jobLockMap[name] = true
 
-      const end = di.metric.startTimer({
-        name,
-        interval: di.config.JOB_INTERVAL,
-      })
+    const end = metric.startTimer({
+      name,
+      interval: config.JOB_INTERVAL,
+    })
 
-      try {
-        di.logger.debug('Job started', { name })
-        await cb(handlerValue)
-        end({ result: 'success' })
-      } catch (error) {
-        di.logger.warn('Job ended with error', error)
-        end({ result: 'error' })
-      } finally {
-        jobLockMap[name] = false
-        di.logger.debug('Job ended', { name })
-      }
+    try {
+      logger.debug('Job started', { name })
+      await handler(handlerValue)
+      end({ result: 'success' })
+    } catch (error) {
+      logger.warn('Job ended with error', error)
+      end({ result: 'error' })
+    } finally {
+      jobLockMap[name] = false
+      logger.debug('Job ended', { name })
     }
-    await handler(initial.start)
-    setInterval(handler, di.config.JOB_INTERVAL, initial.pooling)
+  }
+
+  const pooling = (handlerValue: Initial) => {
+    return setInterval(() => once(handlerValue), config.JOB_INTERVAL)
+  }
+
+  return {
+    once,
+    pooling,
   }
 }

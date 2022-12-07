@@ -3,7 +3,7 @@ import type { LoggerOptions, Logger } from './types'
 
 export const LOG_LEVELS = ['error', 'warn', 'log', 'info', 'debug']
 
-export type LoggerModule = ReturnType<typeof makeLogger>
+export type LoggerService = ReturnType<typeof makeLogger>
 
 export const makeLogger = (options: LoggerOptions) => {
   const { level, pretty, silent }: LoggerOptions = options

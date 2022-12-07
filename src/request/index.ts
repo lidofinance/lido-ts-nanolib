@@ -8,7 +8,7 @@ import type {
 } from './types'
 import fetch, { FetchError } from 'node-fetch'
 
-export type RequestModule = ReturnType<typeof makeRequest>
+export type RequestService = ReturnType<typeof makeRequest>
 
 export const getUrl = (
   baseUrl: RequestInfo | undefined,
