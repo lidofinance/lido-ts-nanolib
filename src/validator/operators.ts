@@ -44,15 +44,10 @@ type Chain<T> = Fn<T>[]
 export const pipe = <T>(arg: T, ...fns: Chain<T>) =>
   fns.reduce((acc, fn) => fn(acc), arg)
 
-interface WithLength {
-  length: number
-}
-export const min_length = (len: number, errorMessage?: string) => {
-  function check_length<T extends WithLength>(arg: T): T
-  function check_length<T>(arg: T extends string ? T : T[]) {
+export const min_length =
+  (len: number, errorMessage?: string) =>
+  <T>(arg: string | unknown[]): T => {
     if (arg.length > len)
       throw new ValidationError(errorMessage || 'Invalid length')
-    return arg
+    return arg as T
   }
-  return check_length
-}

@@ -101,11 +101,11 @@ export const logger =
   (logger: ReturnType<typeof makeLogger>): Middleware =>
   async (config, next) => {
     let response!: Response
-    logger.log('Start request', config)
+    logger.debug('Start request', config)
     try {
       response = await next(config)
     } finally {
-      logger.log('End request', config)
+      logger.debug('End request', config)
     }
     return response
   }
