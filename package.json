@@ -1,5 +1,5 @@
 {
-  "name": "tooling-nanolib-test",
+  "name": "lido-nanolib",
   "version": "0.0.0-semantic-release",
   "main": "dist/index.js",
   "author": "Eddort <webisforce@gmail.com>",
