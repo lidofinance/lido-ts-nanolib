@@ -23,7 +23,7 @@ const mockConsole = () => {
 
 describe('Logger', () => {
   test('make logger', () => {
-    const logger = makeLogger({ pretty: true, level: 'error' })
+    const logger = makeLogger({ format: 'json', level: 'error' })
     expect(logger).toBeDefined()
   })
 
@@ -41,7 +41,7 @@ describe('Logger', () => {
   describe('print level', () => {
     test('debug enabled: debug logs should be printing', () => {
       const { restore, log } = mockConsole()
-      const logger = makeLogger({ pretty: false, level: 'debug' })
+      const logger = makeLogger({ format: 'json', level: 'debug' })
 
       logger.debug('test')
 
@@ -56,7 +56,7 @@ describe('Logger', () => {
 
     test("debug enabled: debug logs shouldn't be printing", () => {
       const { restore, log } = mockConsole()
-      const logger = makeLogger({ pretty: false, level: 'info' })
+      const logger = makeLogger({ format: 'json', level: 'info' })
 
       logger.debug('test')
 
@@ -71,7 +71,7 @@ describe('Logger', () => {
 
     test('error enabled: all logs except the error must be hidden', () => {
       const { restore, log } = mockConsole()
-      const logger = makeLogger({ pretty: false, level: 'error' })
+      const logger = makeLogger({ format: 'json', level: 'error' })
 
       logger.error('test')
 

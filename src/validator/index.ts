@@ -34,6 +34,7 @@ export const str = make(v.str)
 export const bool = make(v.bool)
 
 export const level_attr = make(v.level_attr)
+export const log_format = make(v.log_format)
 /**
  * Check unknown value is object
  * ```ts

@@ -1,5 +1,5 @@
 import { ValidationError } from './errors.js'
-import type { LogLevelsUnion } from '../logger/types'
+import type { Format, LogLevelsUnion } from '../logger/types.js'
 
 export const num = (input: unknown, errorMessage?: string) => {
   if (!Number.isNaN(input) && typeof input === 'string')
@@ -35,9 +35,18 @@ export const bool = (input: unknown | boolean, errorMessage?: string) => {
 const isLevelAttr = (input: string): input is LogLevelsUnion =>
   ['debug', 'info', 'log', 'warn', 'error'].includes(input)
 
+const isLogFormat = (input: string): input is Format =>
+  ['json', 'simple'].includes(input)
+
 export const level_attr = (input: unknown, errorMessage?: string) => {
   const string = str(input)
   if (isLevelAttr(string)) return string
+  throw new ValidationError(errorMessage || `Invalid level input: "${input}"`)
+}
+
+export const log_format = (input: unknown, errorMessage?: string) => {
+  const string = str(input)
+  if (isLogFormat(string)) return string
   throw new ValidationError(errorMessage || `Invalid level input: "${input}"`)
 }
 
