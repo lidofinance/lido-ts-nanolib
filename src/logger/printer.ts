@@ -1,3 +1,6 @@
+import { stringify, sanitize } from './sanitizer.js'
+import { Sanitizer } from './types.js'
+
 const colorTable = {
   debug: '\x1b[32m', // green
   info: '\x1b[32m', // green
@@ -18,18 +21,22 @@ export const dateFormat = (ts: number) => {
 }
 
 export const printer = {
-  json<T>(target: T, level: string) {
-    console[level](JSON.stringify(target))
+  json<T>(target: T, level: string, sanitizer: Sanitizer) {
+    console[level](stringify(target, sanitizer))
   },
   simple<T extends { message: string; details?: any; timestamp: number }>(
     target: T,
-    level: string
+    level: string,
+    sanitizer: Sanitizer
   ) {
     const { message, ...rest } = target
     let printing = `${white}${dateFormat(rest.timestamp)}${
       colorTable[level]
-    } ${level}${white}:${colorTable[level]} ${message}${white}`
-    if (rest.details) printing += ` ${JSON.stringify(rest.details)}`
+    } ${level}${white}:${colorTable[level]} ${sanitize(
+      message,
+      sanitizer
+    )}${white}`
+    if (rest.details) printing += ` ${stringify(rest.details, sanitizer)}`
     console[level](printing)
   },
 }

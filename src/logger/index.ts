@@ -6,7 +6,12 @@ export const LOG_LEVELS = ['error', 'warn', 'log', 'info', 'debug']
 export type LoggerService = ReturnType<typeof makeLogger>
 
 export const makeLogger = (options: LoggerOptions) => {
-  const { level, format, silent }: LoggerOptions = options
+  const {
+    level,
+    format,
+    silent,
+    sanitizer = { secrets: [], replacer: '*' },
+  }: LoggerOptions = options
   return LOG_LEVELS.reduce((logger, logLevel) => {
     logger[logLevel] = (message: string, details?: any) => {
       const logLevelOrder = LOG_LEVELS.indexOf(logLevel)
@@ -15,6 +20,7 @@ export const makeLogger = (options: LoggerOptions) => {
         message: string
         level: string
         timestamp: number
+
         details?: unknown
       } = {
         message,
@@ -34,7 +40,7 @@ export const makeLogger = (options: LoggerOptions) => {
 
       const print = format === 'simple' ? printer.simple : printer.json
 
-      if (!silent) print(output, logLevel)
+      if (!silent) print(output, logLevel, sanitizer)
     }
     return logger
   }, {}) as Logger
