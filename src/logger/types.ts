@@ -12,8 +12,14 @@ export type Logger = Record<
   (message: string, details?: any) => void
 >
 
+export type Sanitizer = {
+  secrets: string[]
+  replacer: string
+}
+
 export type LoggerOptions = {
   level: LogLevelsUnion
   format: Format
   silent?: boolean
+  sanitizer?: Sanitizer
 }
