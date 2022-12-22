@@ -23,3 +23,19 @@ export const makeDeep = <T>(
     }
   }
 }
+
+export const makeJson = <T>(
+  parseFn: (input: unknown, errorMessage?: string) => T
+) => {
+  return <B>(input: unknown, cb: (arg: T) => B, errorMessage?: string) => {
+    if (typeof input === 'undefined')
+      throw new ValidationError(errorMessage || 'Empty value', input)
+    if (typeof input !== 'string')
+      throw new ValidationError(errorMessage || 'Input must be a string', input)
+    try {
+      return cb(parseFn(JSON.parse(input), errorMessage))
+    } catch (error) {
+      throw new ValidationError(error.message, input)
+    }
+  }
+}
