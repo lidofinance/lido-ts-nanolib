@@ -1,5 +1,5 @@
 import * as v from './validators.js'
-import { make, makeDeep } from './makers.js'
+import { make, makeDeep, makeJson } from './makers.js'
 
 export * from './operators.js'
 /**
@@ -57,3 +57,26 @@ export const obj = makeDeep(v.obj)
  * @returns array with nested types
  */
 export const arr = makeDeep(v.arr)
+
+/**
+ * Check string value is object
+ * ```ts
+ * const user = json_obj(json.user, user => ({name: str(user.name)}))
+ * ```
+ * @param value - unknown object
+ * @param castingCallback - callback for casting unknown object to data structure
+ * @param {String | undefined} errorMessage - custom error message
+ * @returns object with nested types
+ */
+export const json_obj = makeJson(v.obj)
+/**
+ * Check string value is array
+ * ```ts
+ * const prices = json_arr(json.prices, prices => prices.map(num))
+ * ```
+ * @param value - unknown array
+ * @param castingCallback - callback for casting unknown object to data structure
+ * @param {String | undefined} errorMessage - custom error message
+ * @returns array with nested types
+ */
+export const json_arr = makeJson(v.arr)
