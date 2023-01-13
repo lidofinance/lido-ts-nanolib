@@ -1,10 +1,11 @@
-import { ValidationError } from './errors.js'
+import { ValidationError, ValidationEmptyError } from './errors.js'
 
 export const optional = <T>(cb: () => T) => {
   try {
     return cb()
-  } catch (_) {
-    return
+  } catch (error) {
+    if (error instanceof ValidationEmptyError) return
+    throw error
   }
 }
 

@@ -2,9 +2,9 @@ import { ValidationError } from './errors.js'
 import type { Format, LogLevelsUnion } from '../logger/types.js'
 
 export const num = (input: unknown, errorMessage?: string) => {
-  if (!Number.isNaN(input) && typeof input === 'string')
+  if (typeof input === 'string' && !Number.isNaN(Number(input)))
     return parseFloat(input)
-  if (!Number.isNaN(input) && typeof input === 'number') return input
+  if (typeof input === 'number' && !isNaN(input)) return input
   throw new ValidationError(errorMessage || `Invalid number input: "${input}"`)
 }
 

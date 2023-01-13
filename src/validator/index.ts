@@ -1,5 +1,7 @@
 import * as v from './validators.js'
 import { make, makeDeep, makeJson } from './makers.js'
+import { or } from './operators.js'
+import { ValidationEmptyError, ValidationError } from './errors.js'
 
 export * from './operators.js'
 /**
@@ -80,3 +82,31 @@ export const json_obj = makeJson(v.obj)
  * @returns array with nested types
  */
 export const json_arr = makeJson(v.arr)
+
+type Check<A, B> = A extends B ? A : never
+
+/**
+ * Check satisfies input with literal
+ * ```ts
+ * const name = literal('John', 'some unknown string')
+ * const age = literal(33, 22)
+ * ```
+ * @param expected - expected value
+ * @param value - unknown string or number
+ * @param {String | undefined} errorMessage - custom error message
+ * @returns expected or throw error
+ */
+export const literal = <Expected, Input>(
+  expected: Expected,
+  input: Input,
+  errorMessage?: string | number
+): Check<Expected, Input> => {
+  if (typeof input === 'undefined')
+    throw new ValidationEmptyError(errorMessage, 'Empty value')
+  const parsed = or(
+    () => str(input),
+    () => num(input)
+  )
+  if (expected === parsed) return expected as Check<Expected, Input>
+  throw new ValidationError(errorMessage || `Invalid literal input: "${input}"`)
+}
