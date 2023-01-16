@@ -13,6 +13,14 @@ describe('data casting', () => {
     const value = 'true' as unknown
     expect(bool(value)).toBe(true)
   })
+  test('boolean as upper string (True)', () => {
+    const value = 'True' as unknown
+    expect(bool(value)).toBe(true)
+  })
+  test('boolean as upper string (False)', () => {
+    const value = 'False' as unknown
+    expect(bool(value)).toBe(false)
+  })
   test('boolean as boolean', () => {
     const value = true as unknown
     expect(bool(value)).toBe(true)
@@ -33,6 +41,16 @@ describe('data casting optional', () => {
   test('boolean as string', () => {
     const value = 'true' as unknown
     expect(optional(() => bool(value))).toBe(true)
+    expect(optional(() => bool())).toBe(undefined)
+  })
+  test('boolean as upper string (True)', () => {
+    const value = 'True' as unknown
+    expect(optional(() => bool(value))).toBe(true)
+    expect(optional(() => bool())).toBe(undefined)
+  })
+  test('boolean as upper string (False)', () => {
+    const value = 'False' as unknown
+    expect(optional(() => bool(value))).toBe(false)
     expect(optional(() => bool())).toBe(undefined)
   })
   test('boolean as boolean', () => {

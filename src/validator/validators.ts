@@ -21,9 +21,11 @@ export const bool = (input: unknown | boolean, errorMessage?: string) => {
   switch (input) {
     case true:
     case 'true':
+    case 'True':
       return true
     case false:
     case 'false':
+    case 'False':
       return false
     default:
       throw new ValidationError(
