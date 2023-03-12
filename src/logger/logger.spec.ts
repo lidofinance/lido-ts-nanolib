@@ -2,12 +2,14 @@ import { makeLogger, LOG_LEVELS } from './index.js'
 import { dateFormat } from './printer.js'
 import type { LogLevelsUnion } from './types.js'
 
+import { SpyInstance } from 'vitest'
+
 const mockConsole = () => {
-  const log = LOG_LEVELS.reduce<Record<LogLevelsUnion, jest.SpyInstance>>(
+  const log = LOG_LEVELS.reduce<Record<LogLevelsUnion, SpyInstance>>(
     (acc, level) => {
-      const method = jest
+      const method = vi
         .spyOn(console, level as LogLevelsUnion)
-        .mockImplementation()
+        .mockImplementation(() => ({ log: () => vi.fn }))
       acc[level] = method
       return acc
     },
