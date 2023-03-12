@@ -1,5 +1,7 @@
 import { str, num, obj, arr, json_obj, json_arr } from './index.js'
 
+const node19orHigher = parseInt(process.versions.node.split('.')[0]) >= 19
+
 describe('deep data casting', () => {
   test('object', () => {
     const value = { test: { some: { value: 'here' } } } as unknown
@@ -58,21 +60,39 @@ describe('deep data casting', () => {
           })),
         }))
       expect(cast).toThrow()
-      expect(cast).toThrowError('Unexpected end of JSON input')
+      if (node19orHigher) {
+        expect(cast).toThrowError(
+          "Expected property name or '}' in JSON at position 1"
+        )
+      } else {
+        expect(cast).toThrowError('Unexpected end of JSON input')
+      }
     })
 
     test('json array numbers', () => {
       const value = '[1'
       const cast = () => json_arr(value, (array) => array.map(num))
       expect(cast).toThrow()
-      expect(cast).toThrowError('Unexpected end of JSON input')
+      if (node19orHigher) {
+        expect(cast).toThrowError(
+          "Expected ',' or ']' after array element in JSON at position 2"
+        )
+      } else {
+        expect(cast).toThrowError('Unexpected end of JSON input')
+      }
     })
 
     test('json array strings', () => {
       const value = '["s"'
       const cast = () => json_arr(value, (array) => array.map(str))
       expect(cast).toThrow()
-      expect(cast).toThrowError('Unexpected end of JSON input')
+      if (node19orHigher) {
+        expect(cast).toThrowError(
+          "Expected ',' or ']' after array element in JSON at position 4"
+        )
+      } else {
+        expect(cast).toThrowError('Unexpected end of JSON input')
+      }
     })
   })
 })
