@@ -1,9 +1,9 @@
-name: deploy
+name: build
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   deploy:
@@ -34,8 +34,3 @@ jobs:
         run: yarn lint
       - name: Build Components
         run: yarn build
-      - name: Publish to NPM
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn semantic-release
