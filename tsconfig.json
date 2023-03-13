@@ -11,8 +11,8 @@
     "strictNullChecks": true,
     "outDir": "./dist",
     "baseUrl": "./src",
-    "declaration": true
+    "declaration": true,
+    "types": ["vitest/globals"]
   },
-  "exclude": ["node_modules", "dist"],
-  "ts-node": { "esm": true }
+  "exclude": ["node_modules", "dist"]
 }

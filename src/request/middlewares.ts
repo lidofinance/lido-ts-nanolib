@@ -81,7 +81,7 @@ export const retry =
   async (config, next) => {
     const loop = async () => {
       let response!: Response
-      config.attempt++
+      config = { ...config, attempt: config.attempt + 1 }
       try {
         response = await next(config)
       } catch (error) {
