@@ -1,12 +1,12 @@
 # Lido nanolib
 
-Library for Nodejs written on TS designed for tiny applications.
+Library for Node.js written on TS designed for tiny applications.
 
 ## Features
 
-- Nodejs ES modules support
+- Node.js ES modules support
 - Extra small size
-- Includes all requirement functional for modern Nodejs applications
+- Includes all requirement functional for modern Node.js applications
 
 ## Modules
 
