@@ -1,6 +1,5 @@
 import * as v from './validators.js'
 import { make, makeDeep, makeJson } from './makers.js'
-import { or } from './operators.js'
 import { ValidationEmptyError, ValidationError } from './errors.js'
 
 export * from './operators.js'
