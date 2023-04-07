@@ -87,4 +87,54 @@ describe('Logger', () => {
       restore()
     })
   })
+  describe('error handling with cause', () => {
+    test('error with cause should be properly serialized in log', () => {
+      const { restore, log } = mockConsole()
+      const logger = makeLogger({ format: 'json', level: 'error' })
+
+      const level2Error = new Error('Level 2 error')
+      const level1Error = new Error('Level 1 error')
+      ;(level1Error as any).cause = level2Error
+
+      logger.error('Test error with cause', level1Error)
+
+      expect(log.error).toHaveBeenCalledTimes(1)
+      const loggedError = JSON.parse(log.error.mock.calls[0][0])
+
+      expect(loggedError.message).toBe('Test error with cause')
+      expect(loggedError.details.message).toBe('Level 1 error')
+      expect(loggedError.details.cause.message).toBe('Level 2 error')
+
+      restore()
+    })
+
+    test('error with deeply nested cause should be limited by depth', () => {
+      const { restore, log } = mockConsole()
+      const logger = makeLogger({
+        format: 'json',
+        level: 'error',
+        causeDepth: 2,
+      })
+
+      const level3Error = new Error('Level 3 error')
+      const level2Error = new Error('Level 2 error')
+      ;(level2Error as Error).cause = level3Error
+      const level1Error = new Error('Level 1 error')
+      ;(level1Error as Error).cause = level2Error
+
+      logger.error('Test error with deeply nested cause', level1Error)
+
+      expect(log.error).toHaveBeenCalledTimes(1)
+      const loggedError = JSON.parse(log.error.mock.calls[0][0])
+
+      expect(loggedError.message).toBe('Test error with deeply nested cause')
+      expect(loggedError.details.message).toBe('Level 1 error')
+      expect(loggedError.details.cause.message).toBe('Level 2 error')
+      expect(loggedError.details.cause.cause).toEqual({
+        message: 'Max depth reached',
+      })
+
+      restore()
+    })
+  })
 })

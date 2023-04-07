@@ -22,4 +22,5 @@ export type LoggerOptions = {
   format: Format
   silent?: boolean
   sanitizer?: Sanitizer
+  causeDepth?: number
 }

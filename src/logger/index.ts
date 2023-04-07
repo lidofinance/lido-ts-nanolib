@@ -1,4 +1,5 @@
 import { printer } from './printer.js'
+import { serializeErrorWithCause } from './serialize-error.js'
 import type { LoggerOptions, Logger } from './types'
 
 export const LOG_LEVELS = ['error', 'warn', 'log', 'info', 'debug']
@@ -10,6 +11,7 @@ export const makeLogger = (options: LoggerOptions) => {
     level,
     format,
     silent,
+    causeDepth = 3,
     sanitizer = { secrets: [], replacer: '*' },
   }: LoggerOptions = options
   return LOG_LEVELS.reduce((logger, logLevel) => {
@@ -32,9 +34,7 @@ export const makeLogger = (options: LoggerOptions) => {
       if (details instanceof Error) {
         output.details = {
           ...details,
-          name: details.name,
-          message: details.message,
-          stack: details.stack,
+          ...serializeErrorWithCause(details, causeDepth),
         }
       }
 
